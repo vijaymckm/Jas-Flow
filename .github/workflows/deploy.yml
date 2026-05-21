@@ -43,12 +43,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Stage site files
+        run: |
+          mkdir -p _site
+          cp index.html styles.css script.js _site/
+          touch _site/.nojekyll
+          ls -la _site
       - name: Publish to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: ./_site
           publish_branch: gh-pages
-          exclude_assets: '.github,.git,README.md'
           force_orphan: true
           commit_message: "deploy: ${{ github.event.head_commit.message }}"
